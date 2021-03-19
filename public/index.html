@@ -1,27 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html>
 
 <head>
-  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hello there</title>
-  <style media="screen">
-    html {
-      background-color: teal;
-    }
-
-    h1 {
-      text-align: center;
-      margin-top: 40vh;
-      font-size: 90px;
-      color: purple;
-      font-family: Helvetica, sans-serif;
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+  <style>
+    #mapid {
+      height: 300px;
+      width: 375px;
     }
   </style>
+  <title>Fetch the client's geolocation</title>
 </head>
 
-<body id="screen">
-  <h1>hello world!</h1>
+<body>
+  <h2>Data Selfie App</h2>
+  <p>
+    Latitude: <span id="lat"></span>&deg;<br>
+    Longitude: <span id="lon"></span>&deg;
+  </p>
+  <div id="mapid"></div>
+
+  <script src="script.js"></script>
 </body>
 
 </html>
