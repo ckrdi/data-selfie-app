@@ -16,11 +16,21 @@ const marker = L.marker([0, 0]).addTo(mymap);
 if ('geolocation' in navigator) {
   console.log('geolocation available');
 
-  function getLocation() {
+  function getLocation(event) {
+    // stop the page reload when we click get location
+    event.preventDefault();
+    // assign the value of input to a variable
+    const inputValue = document.getElementById('mood').value;
+
+    // use async keyword so we can use await
     navigator.geolocation.getCurrentPosition(async (position) => {
+      // assign the latitude and longitude to variable(s)
+      // add a timestamp when getLocation is called
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
+      const timestamp = Date.now();
 
+      // display the location to the webpage
       document.getElementById('lat').textContent = lat;
       document.getElementById('lon').textContent = lon;
 
@@ -28,6 +38,8 @@ if ('geolocation' in navigator) {
       mymap.setView([lat, lon], 15);
       marker.setLatLng([lat, lon]);
 
+      // send the location data and timestamp 
+      // to the server using fetch()
       const response = await fetch('/api', {
         method: 'POST',
         headers: {
@@ -35,17 +47,22 @@ if ('geolocation' in navigator) {
           // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: JSON.stringify({
+          inputValue,
           lat,
-          lon
+          lon,
+          timestamp
         })
       });
+
+      // assign the response back from server to a variable
+      // and console that response
       const data = await response.json();
       console.log(data);
     })
   }
-  getLocation();
 } else {
   console.log('geolocation not available');
 };
 
+// button event listener
 document.getElementById('postRequest').addEventListener('click', getLocation);
