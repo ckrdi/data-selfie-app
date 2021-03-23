@@ -35,10 +35,17 @@ app.post('/api', (request, response) => {
 
   // echo back the request to the client to tell
   // the message was received
-  response.send({
-    status: data.inputValue,
-    latitude: data.lat,
-    longitude: data.lon,
-    timestamp: data.timestamp
-  });
+  response.send(data);
+});
+
+// GET handler method
+app.get('/api', (request, response) => {
+  console.log('I got a request!');
+  database.find({}, (err, data) => {
+    if (err) {
+      response.send('ERROR');
+      return;
+    }
+    response.send(data);
+  })
 });
