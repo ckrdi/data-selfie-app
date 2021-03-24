@@ -22,7 +22,8 @@ app.listen(port, () => {
 app.use(express.static('public'));
 
 // use express middleware to parse json from request(s)
-app.use(express.json());
+// because the request payload are too large, we define the payload limit
+app.use(express.json({limit: '10mb'}));
 
 // POST handler method
 app.post('/api', (request, response) => {

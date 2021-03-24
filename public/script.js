@@ -15,13 +15,21 @@ const marker = L.marker([0, 0]).addTo(mymap);
 // getting the current position and then display it on the webpage
 if ('geolocation' in navigator) {
   console.log('geolocation available');
+} else {
+  console.log('geolocation not available');
+}
 
-  function getLocation(event) {
-    // stop the page reload when we click get location
+// p5.js looks at setup function to run the library
+// and automatically create the canvas on the webpage
+function setup() {
+  // not using canvas but createCapture to display video source
+  noCanvas();
+  const video = createCapture('VIDEO');
+  video.size(640, 360);
+
+  document.getElementById('postRequest').addEventListener('click', function getLocation(event) {
+    // prevent the page from reloading when the button is clicked
     event.preventDefault();
-    // assign the value of input to a variable
-    const inputValue = document.getElementById('mood').value;
-
     // use async keyword so we can use await
     navigator.geolocation.getCurrentPosition(async (position) => {
       // assign the latitude and longitude to variable(s)
@@ -29,6 +37,13 @@ if ('geolocation' in navigator) {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
       const timestamp = Date.now();
+      // assign the value of input to a variable
+      const text = document.getElementById('mood').value;
+
+      // load the pixels of video source to p5 canvas
+      // and save that pixel to binary data
+      video.loadPixels();
+      const image = video.canvas.toDataURL();
 
       // display the location to the webpage
       document.getElementById('lat').textContent = lat;
@@ -38,8 +53,7 @@ if ('geolocation' in navigator) {
       mymap.setView([lat, lon], 15);
       marker.setLatLng([lat, lon]);
 
-      // send the location data and timestamp 
-      // to the server using fetch()
+      // send the data to the server using fetch()
       const response = await fetch('/api', {
         method: 'POST',
         headers: {
@@ -47,7 +61,8 @@ if ('geolocation' in navigator) {
           // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: JSON.stringify({
-          inputValue,
+          image,
+          text,
           lat,
           lon,
           timestamp
@@ -59,10 +74,5 @@ if ('geolocation' in navigator) {
       const data = await response.json();
       console.log(data);
     })
-  }
-} else {
-  console.log('geolocation not available');
-};
-
-// button event listener
-document.getElementById('postRequest').addEventListener('click', getLocation);
+  })
+}

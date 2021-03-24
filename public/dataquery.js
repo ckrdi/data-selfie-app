@@ -6,19 +6,22 @@ async function getData() {
   for (let i = 0; i < data.length; i++) {
     // display it to the page with simple DOM
     const order = document.createElement('ol');
+    const image = document.createElement('img')
     const mood = document.createElement('li');
     const lat = document.createElement('li');
     const lon = document.createElement('li');
     const time = document.createElement('li');
-    
+    // add the image to <img> src
+    image.src = data[i].image
+
     // convert the json object to string
-    mood.textContent = 'mood: ' + JSON.stringify(data[i].inputValue);
+    mood.textContent = 'mood: ' + JSON.stringify(data[i].text);
     lat.textContent = 'latitude: ' + JSON.stringify(data[i].lat);
     lon.textContent = 'longitude: ' + JSON.stringify(data[i].lon);
     // convert the timestamp to the date
     time.textContent = 'timestamp: ' + JSON.stringify(new Date(data[i].timestamp).toLocaleString());
-    
-    order.append(mood, lat, lon, time);
+
+    order.append(image, mood, lat, lon, time);
     document.getElementById('dataquery').append(order);
   }
 };
